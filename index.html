@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Essay Viewer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        #content {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Essay Viewer</h1>
+    <input type="file" id="fileInput" multiple>
+    <button onclick="loadRandomEssay()">Load Random Essay</button>
+    <div id="content">Click the button to load an essay.</div>
+
+    <script>
+        let files = [];
+
+        // Event listener for file input
+        document.getElementById('fileInput').addEventListener('change', function(event) {
+            files = Array.from(event.target.files);  // Store selected files in the 'files' array
+        });
+
+        function loadRandomEssay() {
+            if (files.length === 0) {
+                document.getElementById('content').innerText = 'No essays selected.';
+                return;
+            }
+
+            const randomIndex = Math.floor(Math.random() * files.length);  // Select a random file
+            const file = files[randomIndex];
+            const reader = new FileReader();
+
+            // When file is successfully read
+            reader.onload = function(e) {
+                document.getElementById('content').innerText = e.target.result;  // Display the file content
+            };
+
+            // In case of an error during file reading
+            reader.onerror = function(e) {
+                console.error('Error reading file:', e);
+                document.getElementById('content').innerText = 'Failed to load essay.';
+            };
+
+            reader.readAsText(file);  // Read the content of the selected file as text
+        }
+    </script>
+</body>
+</html>
